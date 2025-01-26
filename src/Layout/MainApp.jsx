@@ -38,7 +38,7 @@ class MainApp extends React.Component{
 
                return {
                 allNotes:[...prevState.allNotes, newNote],
-                notes:[...prevState.notes.newNote]
+                notes:[...prevState.notes, newNote]
                }
             });
             return true;
@@ -49,7 +49,6 @@ class MainApp extends React.Component{
     onSearchNoteHandler(keySearch) {
 
         if (!keySearch.trim()) {
-            // console.log(this.state.allNotes)
             this.setState({notes:this.state.allNotes});
         }else{
             const notes = this.state.notes.filter((note) =>
