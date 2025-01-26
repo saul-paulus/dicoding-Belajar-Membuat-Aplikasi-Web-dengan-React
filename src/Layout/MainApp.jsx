@@ -12,6 +12,7 @@ class MainApp extends React.Component{
 
         this.state = {
             notes: getInitialData(),
+            allNotes: getInitialData(),
             titleBodyNote: "Tulis catatan anda!",
             titleBrand: "myNotes"
         }
@@ -26,47 +27,62 @@ class MainApp extends React.Component{
 
     onAddNoteHandler({title,body,createdAt,archived }){
         try{
-            this.setState((prevState)=>({
-                notes:[
-                    ...prevState.notes,
-                    {
-                        id: +new Date(),
-                        title,
-                        body,
-                        createdAt,
-                        archived,
-                    }
-                ]
-            }));
+            this.setState((prevState)=>{
+               const newNote = {
+                id: +new Date(),
+                title,
+                body,
+                createdAt,
+                archived
+               };
+
+               return {
+                allNotes:[...prevState.allNotes, newNote],
+                notes:[...prevState.notes.newNote]
+               }
+            });
             return true;
         }catch(error){
             throw error;
         }
     }
     onSearchNoteHandler(keySearch) {
-        const notes = this.state.notes.filter((note) =>
-            note.title.toLowerCase().includes(keySearch.toLowerCase())
-        );
-        this.setState({ notes});
+
+        if (!keySearch.trim()) {
+            // console.log(this.state.allNotes)
+            this.setState({notes:this.state.allNotes});
+        }else{
+            const notes = this.state.notes.filter((note) =>
+                note.title.toLowerCase().includes(keySearch.toLowerCase())
+            );
+            this.setState({notes: notes});
+        }
     }
     
 
     onDeleteNoteHandler(id){
-        const notes = this.state.notes.filter(note => note.id !== id);
-        this.setState({notes});
+        this.setState((prevState) => {
+            const notes = prevState.allNotes.filter((note) => note.id !== id);
+            return {
+                allNotes: notes,
+                notes: notes, 
+            };
+        });
     }
 
     onArchivedHandler(id){
-        const notes = this.state.notes.map(note => {
-            if (note.id === id) {
-                return { 
-                    ...note, 
-                    archived: !note.archived
-                };
-            }
-            return note; 
+        this.setState((prevState) => {
+            const notes = prevState.allNotes.map((note) => {
+                if (note.id === id) {
+                    return { ...note, archived: !note.archived };
+                }
+                return note;
+            });
+            return {
+                allNotes: notes,
+                notes: notes,  
+            };
         });
-        this.setState({notes});
     }
 
     render(){

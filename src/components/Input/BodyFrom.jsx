@@ -47,7 +47,7 @@ class BodyFrom  extends React.Component {
         const reqPayload = {
             title,
             body,
-            createdAt: new Date(),
+            createdAt: new Date().toISOString(),
             archived: this.state.archived
         }
 

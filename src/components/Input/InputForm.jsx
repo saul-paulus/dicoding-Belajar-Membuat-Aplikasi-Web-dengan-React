@@ -7,8 +7,9 @@ function InputForm({addNote}){
   const [sisaKarakter, setSisaKarakter] = useState(karakter); 
 
   const handlerTitleChange = (title) => {
-    if(title.length >= karakter){
-      alert(`Karakter tidak boleh lebih dari ${karakter} karakter`)
+    if(title.length > karakter){
+      alert(`Karakter tidak boleh lebih dari ${karakter} karakter`);
+      return;
     }
     setSisaKarakter(karakter - title.length);
   };
